@@ -7,7 +7,7 @@ It is equal organize the index and the records
 */
 
 import (
-	api "distributed_services_with_go/github.com/MrSnake-P/api/log_v1"
+	api "distributed_services_with_go/api/v1"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"os"

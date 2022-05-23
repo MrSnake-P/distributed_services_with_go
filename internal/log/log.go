@@ -1,8 +1,7 @@
 package log
 
 import (
-	api "distributed_services_with_go/github.com/MrSnake-P/api/log_v1"
-	"fmt"
+	api "distributed_services_with_go/api/v1"
 	"io"
 	"io/ioutil"
 	"os"
@@ -94,7 +93,7 @@ func (l *Log) Read(off uint64) (*api.Record, error) {
 		}
 	}
 	if s == nil || s.nextOffset <= off {
-		return nil, fmt.Errorf("offset out of range")
+		return nil, api.ErrOffsetOutOfRange{Offset: off}
 	}
 	return s.Read(off)
 }
