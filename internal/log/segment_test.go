@@ -1,7 +1,7 @@
 package log
 
 import (
-	api "distributed_services_with_go/github.com/MrSnake-P/api/log_v1"
+	api "distributed_services_with_go/api/v1"
 	"github.com/stretchr/testify/require"
 	"io"
 	"io/ioutil"
