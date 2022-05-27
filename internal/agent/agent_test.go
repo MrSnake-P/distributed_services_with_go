@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	api "distributed_services_with_go/api/v1"
 	"distributed_services_with_go/internal/config"
+	"distributed_services_with_go/internal/loadbalance"
 	"fmt"
 	"github.com/stretchr/testify/require"
 	"github.com/travisjeffery/go-dynaport"
@@ -84,10 +85,13 @@ func TestAgent(t *testing.T) {
 	)
 	require.NoError(t, err)
 
+	// wait until replication has finished
+	time.Sleep(3 * time.Second)
+
 	consumeResponse, err := leaderClient.Consume(
 		context.Background(),
 		&api.ConsumeRequest{
-			Offset: produceResponse.Offset + 1,
+			Offset: produceResponse.Offset,
 		},
 	)
 	//require.Nil(t, consumeResponse)
@@ -129,7 +133,7 @@ func client(t *testing.T, agent *Agent, tlsConfig *tls.Config) api.LogClient {
 	rpcAddr, err := agent.Config.RPCAddr()
 	require.NoError(t, err)
 
-	conn, err := grpc.Dial(fmt.Sprintf("%s", rpcAddr), opts...)
+	conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", loadbalance.Name, rpcAddr), opts...)
 	require.NoError(t, err)
 
 	client := api.NewLogClient(conn)
